@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Scissors, Shirt, Ruler, CheckCircle, MapPin, Phone, MessageCircle, Menu, X, Star, Award, ThumbsUp, ChevronRight } from 'lucide-react';
+import { Scissors, Shirt, Ruler, CheckCircle, MapPin, Phone, MessageCircle, Menu, X, Star, Award, ThumbsUp, ChevronRight, ArrowUp } from 'lucide-react';
 
 const WHATSAPP_NUMBER = "2348060685437";
 const WHATSAPP_MESSAGE = "Hello Gambari Fashion, I want to book an appointment";
@@ -21,14 +21,23 @@ const FadeIn: React.FC<{ children: React.ReactNode, delay?: number, className?: 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      setShowScrollTop(window.scrollY > 400);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const navLinks = [
     { name: 'Home', href: '#home' },
@@ -372,6 +381,18 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: showScrollTop ? 1 : 0, scale: showScrollTop ? 1 : 0.5 }}
+        transition={{ duration: 0.3 }}
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 z-50 p-4 rounded-full bg-burgundy text-white border border-gold/50 shadow-2xl hover:bg-gold hover:text-burgundy hover:scale-110 transition-all duration-300 group ${!showScrollTop && 'pointer-events-none'}`}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform duration-300" />
+      </motion.button>
     </div>
   );
 }
